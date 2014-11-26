@@ -14,7 +14,7 @@ sys_fork(void)
 
 // p4 //
 int 
-sys_clone()
+sys_clone(void)
 {
   return clone();
 }

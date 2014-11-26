@@ -10,9 +10,11 @@ int main(int argc, char *argv[]) {
   // int tid = fork();
   int tid = clone(stack);
 
+  printf(1, "tid = %d\n", tid);
   if (tid < 0) {
     printf(2, "error!\n");
   } else if (tid == 0) {
+    printf(1, "CHILD!\n");
     // child
     for(;;) {
       x++;
@@ -20,6 +22,7 @@ int main(int argc, char *argv[]) {
     }
   } else {
     // parent
+    printf(1, "PARENT!\n");
     for(;;) {
       printf(1, "x = %d\n", x);
       sleep(100);

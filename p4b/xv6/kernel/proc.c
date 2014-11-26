@@ -203,15 +203,23 @@ clone(void)
   //*np->tf = *proc->tf;
 
   
-  uint oldStack = PGROUNDUP(proc->tf->esp);
+  char *oldStack = (char *) PGROUNDDOWN(proc->tf->esp);
   cprintf("oldstack at %x\n", (void *)oldStack);
 
+  char* tempN = (char *) nStack;
+  for(i = 0; i < PGSIZE; i++){
+    tempN[i] = oldStack[i];
+  }
   // I am assuming the pointer passed in as an argument to clone() is the
   // smallest physical address, or the highest logical stack address.
   // This means that the stack ptr will be referenced off of stack+PGSIZE
-  np->tf->esp = (((uint)(proc->tf->esp) & (uint) 0xFFF)) | ((uint) nStack + PGSIZE);
-  np->tf->ebp = (((uint)(proc->tf->ebp) & (uint) 0xFFF)) | ((uint) nStack + PGSIZE);
   
+  *np->tf = *proc->tf;
+  cprintf("old sp = %x, old bp = %x\n", proc->tf->esp, proc->tf->ebp);
+  np->tf->esp = (((uint)(proc->tf->esp) & (uint) 0xFFF)) | ((uint) nStack);
+  np->tf->ebp = (((uint)(proc->tf->ebp) & (uint) 0xFFF)) | ((uint) nStack);
+  cprintf("new sp = %x, new bp = %x\n", np->tf->esp, np->tf->ebp);
+
   // Clear %eax so that fork returns 0 in the child.
   np->tf->eax = 0;
 
@@ -223,6 +231,8 @@ clone(void)
   pid = np->pid;
   np->state = RUNNABLE;
   safestrcpy(np->name, proc->name, sizeof(proc->name));
+  
+  cprintf("returning from clone\n");
   return pid;
 }
 
