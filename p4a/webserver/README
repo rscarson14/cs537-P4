@@ -1,0 +1,14 @@
+Name: R Scott Carson 
+CSL-ID: rcarson
+Name:
+CSL-ID:
+(Leave the second name and ID blank if working alone)
+
+Linux-Implementation Details:
+
+I succesfully implemented the threaded web server. I attempted the
+extra credit and could not get it to work prperly. I believe I am 
+using the fstat() function incorrectly.
+
+XV6-Implementation Details:
+
